@@ -4,8 +4,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends libldap2-dev li
 RUN touch README.md
 COPY . ./
 RUN pip install --no-cache-dir . || pip install --no-cache-dir . || pip install --no-cache-dir -e .
-COPY . /app/
+RUN pip install --no-cache-dir "uvicorn[standard]"
 EXPOSE 8000
-HEALTHCHECK CMD curl --fail http://localhost:8000/ || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:8000/health || curl --fail http://localhost:8000
 USER 1001
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
